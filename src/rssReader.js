@@ -36,16 +36,17 @@ let URLS = [
     'https://assets.wor.jp/rss/rdf/nikkei/news.rdf',
     'https://assets.wor.jp/rss/rdf/reuters/top.rdf',
     'https://assets.wor.jp/rss/rdf/bloomberg/top.rdf',
-    'https://news.ntv.co.jp/rss/index.rdf',
     'https://www.asahi.com/rss/asahi/newsheadlines.rdf',
     'https://assets.wor.jp/rss/rdf/ynnews/news.rdf',
     'https://xtech.nikkei.com/rss/index.rdf',
     'http://feeds.cnn.co.jp/rss/cnn/cnn.rdf?_ga=2.33797217.1759416903.1660832158-699500.1660832158',
-    'https://feeds.dailyfeed.jp/feed/s/6/791.rss'
+    'http://feeds.japan.cnet.com/rss/cnet/all.rdf?_gl=1*6gwgk3*_ga*MTc4MDg1MTQzOS4xNjYwNzQzOTkz*_ga_JGFXZS6RMN*MTY2MTQzMTgzMy4xLjAuMTY2MTQzMTgzMy42MC4wLjA.',
+    'https://news.goo.ne.jp/rss/topstories/gootop/index.rdf'
 ];
 
 for (let i=0 ; i<URLS.length ; i++){
     fetch(URLS[i])
     .then( response => response.text())
-    .then( xmlData => viewXML(xmlData));
+    .then( xmlData => viewXML(xmlData))
+    .catch( (err) => console.error(`取得できませんでした：${err}`));
 }

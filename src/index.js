@@ -1,23 +1,28 @@
-const { app, BrowserWindow, shell } = require('electron');
+const { app, BrowserWindow, shell} = require('electron');
 const path = require('path');
 const { electron } = require('process');
 const { truncate } = require('fs');
 
 
+let mainWindow = null
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-const createWindow = () => {
+app.whenReady().then(() => {
   // Create the browser window.(part of reading rederer)
+  const {screen} = require('electron')
+  const PrimaryDisplay = screen.getPrimaryDisplay()
+  const { width, height } = PrimaryDisplay.workAreaSize
   const mainWindow = new BrowserWindow({
     frame: false,
     titleBarStyle: 'customButtonsOnHover',
     transparent: true,
-    width: 1800,
-    height: 26,
+    width: width,
+    height: 27,
+    maxHeight: 27,
     backgroundColor: 'black',
-    opacity: 0.825,
+    opacity: 0.8,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -29,19 +34,21 @@ const createWindow = () => {
       shell.openExternal(url);
     }
   }
+
   mainWindow.webContents.on('will-navigate', handleUrlOpen);
   mainWindow.webContents.on('new-window', handleUrlOpen);
-  mainWindow.setPosition(0,1030);
-
+  mainWindow.setPosition(0,height);
+  mainWindow.setAlwaysOnTop(true, 'screen-saver');
+  mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
-};
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+// app.on('ready', createWindow);
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
